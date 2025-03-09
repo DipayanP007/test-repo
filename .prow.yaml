@@ -22,6 +22,8 @@ presubmits:
 postsubmits:
   - name: buildockerimage
     decorate: true
+    labels:
+      docker-in-docker: enabled
     decoration_config:
       ssh_key_secrets:
       - ssh-secret
@@ -46,12 +48,4 @@ postsubmits:
           docker push dipayanp007/test-repo
         securityContext:
           privileged: true
-        volumeMounts:
-        - name: regcred
-          mountPath: /docker/config.json
-          subPath: .dockerconfigjson
-          readOnly: true
-        volumes:
-        - name: regcred
-          secret:
-            secretName: regcred
+        
