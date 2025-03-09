@@ -38,7 +38,7 @@ postsubmits:
         - name: DOCKER_CONFIG
           value: /docker
         command:
-        - /bin/bash
+        - /bin/sh
         - -c
         args:
         - |
