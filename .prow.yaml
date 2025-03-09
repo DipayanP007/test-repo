@@ -33,15 +33,16 @@ postsubmits:
     - main
     spec:
       containers:
-      - image: gcr.io/k8s-staging-test-infra/krte:v20250227-3a13bdd784-master
+      - image: shekhawatsanjay/prow-golang-builder:latest
         env:
         - name: DOCKER_CONFIG
           value: /docker
+        - name: DOCKER_IN_DOCKER_ENABLED
+          value: "true"
         command:
-        - wrapper.sh
-        args:
         - bash
         - -c
+        args:
         - |
           cd gomain
           
