@@ -33,14 +33,15 @@ postsubmits:
     - main
     spec:
       containers:
-      - image: docker:dind
+      - image: gcr.io/k8s-staging-test-infra/krte:v20250227-3a13bdd784-master
         env:
         - name: DOCKER_CONFIG
           value: /docker
         command:
-        - /bin/sh
-        - -c
+        - wrapper.sh
         args:
+        - bash
+        - -c
         - |
           cd gomain
           
