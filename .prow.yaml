@@ -1,0 +1,57 @@
+presubmits:
+  - name: runcode         # As for periodics.
+    decorate: true        # As for periodics.
+    decoration_config:
+      ssh_key_secrets:
+      - ssh-secret
+    clone_uri: "git@github.com:DipayanP007/test-repo.git"
+    max_concurrency: 10
+    always_run: true
+    branches:
+    - main
+    spec:
+      containers:
+      - image: golang
+        command:
+        - /bin/bash
+        - -c
+        args:
+        - |
+          cd gomain
+          go run main.go
+postsubmits:
+  - name: buildockerimage
+    decorate: true
+    decoration_config:
+      ssh_key_secrets:
+      - ssh-secret
+    clone_uri: "github.com:DipayanP007/test-repo.git"
+    always_run: true
+    branches:
+    - main
+    spec:
+      containers:
+      - image: docker:dind
+        env:
+        - name: DOCKER_CONFIG
+          value: /docker
+        command:
+        - /bin/bash
+        - -c
+        args:
+        - |
+          cd gomain
+          
+          docker build -t dipayanp007/test-repo .
+          docker push dipayanp007/test-repo
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - name: regcred
+          mountPath: /docker/config.json
+          subPath: .dockerconfigjson
+          readOnly: true
+        volumes:
+        - name: regcred
+          secret:
+            secretName: regcred
