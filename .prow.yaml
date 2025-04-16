@@ -18,6 +18,7 @@ presubmits:
         args:
         - |
           cd gomain
+          whoami
           go run main.go
 postsubmits:
   - name: buildockerimage
